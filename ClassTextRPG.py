@@ -27,8 +27,6 @@ def d20():
 
 #PC START
 class PC():
-    #define Char attributes
-    atrb = {'STR':1, 'AGI':1, 'DEX':1, 'CON':1}
     #Starting Classes available to player
     __classes = ['FIGHTER', 'ROGUE', 'BARBARIAN']
     #All weapons
@@ -52,53 +50,59 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
             choice = choice.upper()
             if choice in PC.__classes:
                 if choice == 'FIGHTER':
+                    self.cclass = 'FIGHTER'
+                    self.clvl = 1
                     self.wpn_equip = 'Longsword'
-                    PC.atrb['STR'] = 6
-                    PC.atrb['AGI'] = 4
-                    PC.atrb['DEX'] = 4
-                    PC.atrb['CON'] = 6
-                    self.str_bonus = round(PC.atrb['STR']/2)
-                    self.agi_bonus = round(PC.atrb['AGI']/2)
-                    self.dex_bonus = round(PC.atrb['DEX']/2)
-                    self.con_bonus = round(PC.atrb['CON']/2)
-                    self.hpmax = PC.atrb['CON']*4
+                    self.atrb['STR'] = 6
+                    self.atrb['AGI'] = 5
+                    self.atrb['DEX'] = 4
+                    self.atrb['CON'] = 9
+                    self.str_bonus = round(self.atrb['STR']/2)
+                    self.agi_bonus = round(self.atrb['AGI']/2)
+                    self.dex_bonus = round(self.atrb['DEX']/2)
+                    self.con_bonus = round(self.atrb['CON']/2)
+                    self.hpmax = self.atrb['CON']*4
                     self.hp = self.hpmax
-                    self.ac = 9+PC.atrb['AGI']
+                    self.ac = 9+self.atrb['AGI']
 
                 elif choice == 'ROGUE':
+                    self.cclass = 'ROGUE'
+                    self.clvl = 1
                     self.wpn_equip = 'Rapier'
-                    PC.atrb['STR'] = 1
-                    PC.atrb['AGI'] = 8
-                    PC.atrb['DEX'] = 8
-                    PC.atrb['CON'] = 3
-                    self.str_bonus = round(PC.atrb['STR']/2)
-                    self.agi_bonus = round(PC.atrb['AGI']/2)
-                    self.dex_bonus = round(PC.atrb['DEX']/2)
-                    self.con_bonus = round(PC.atrb['CON']/2)
-                    self.hpmax = PC.atrb['CON']*4
+                    self.atrb['STR'] = 1
+                    self.atrb['AGI'] = 8
+                    self.atrb['DEX'] = 8
+                    self.atrb['CON'] = 7
+                    self.str_bonus = round(self.atrb['STR']/2)
+                    self.agi_bonus = round(self.atrb['AGI']/2)
+                    self.dex_bonus = round(self.atrb['DEX']/2)
+                    self.con_bonus = round(self.atrb['CON']/2)
+                    self.hpmax = self.atrb['CON']*4
                     self.hp = self.hpmax
-                    self.ac = 9+PC.atrb['AGI']
+                    self.ac = 9+self.atrb['AGI']
 
                 elif choice == 'BARBARIAN':
+                    self.cclass = 'BARBARIAN'
+                    self.clvl = 1
                     self.wpn_equip = 'Maul'
-                    PC.atrb['STR'] = 8
-                    PC.atrb['AGI'] = 1
-                    PC.atrb['DEX'] = 2
-                    PC.atrb['CON'] = 9
-                    self.str_bonus = round(PC.atrb['STR']/2)
-                    self.agi_bonus = round(PC.atrb['AGI']/2)
-                    self.dex_bonus = round(PC.atrb['DEX']/2)
-                    self.con_bonus = round(PC.atrb['CON']/2)
-                    self.hpmax = PC.atrb['CON']*4
+                    self.atrb['STR'] = 8
+                    self.atrb['AGI'] = 1
+                    self.atrb['DEX'] = 2
+                    self.atrb['CON'] = 13
+                    self.str_bonus = round(self.atrb['STR']/2)
+                    self.agi_bonus = round(self.atrb['AGI']/2)
+                    self.dex_bonus = round(self.atrb['DEX']/2)
+                    self.con_bonus = round(self.atrb['CON']/2)
+                    self.hpmax = self.atrb['CON']*4
                     self.hp = self.hpmax
-                    self.ac = 9+PC.atrb['AGI']
+                    self.ac = 9+self.atrb['AGI']
 
             else:
                 print('\nThis class does not exist. Please Choose a Class from the list.')
                 choice = None
                 continue
 
-            print('\n'+self.name+"'s Current Stats are: ", ', '.join("{}: {}".format(k, v) for k, v in PC.atrb.items()))
+            print('\n'+self.name+"'s Current Stats are: ", ', '.join("{}: {}".format(k, v) for k, v in self.atrb.items()))
             print(self.name+"'s", 'current HP is', self.hp)
             print(self.name+"'s", 'current AC is', self.ac)
             print(self.name, 'is wielding a', self.wpn_equip)
@@ -123,55 +127,107 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
         if self.name == '':
             while self.name == '':
                 self.name = input('Please choose a name: ')
+        self.name = self.name.title()
         print('Prepare for a gruelling journey', self.name)
+        self.atrb = {'STR':1, 'AGI':1, 'DEX':1, 'CON':1}
         self.__char_build()
+
+    def lvlup(self):
+        print('Congratulations you have levelled up!')
+        self.clvl += 1
+        
+        if self.cclass == 'FIGHTER':
+            self.atrb['STR'] += 1
+            self.atrb['AGI'] += 1
+            self.atrb['DEX'] += 1
+            self.atrb['CON'] += 1
+            self.str_bonus = round(self.atrb['STR']/2)
+            self.agi_bonus = round(self.atrb['AGI']/2)
+            self.dex_bonus = round(self.atrb['DEX']/2)
+            self.con_bonus = round(self.atrb['CON']/2)
+            self.hpmax = self.atrb['CON']*4
+            self.hp = self.hpmax
+            self.ac = 9+self.atrb['AGI']
+            print('\n'+self.name+" is a level", self.clvl, self.cclass,'Whose current Stats are: ', ', '.join("{}: {}".format(k, v) for k, v in self.atrb.items()))
+            print(self.name+"'s", 'current HP is', self.hp)
+            print(self.name+"'s", 'current AC is', self.ac)
+            input('Press enter to continue.')
+            
+        elif self.cclass == 'ROGUE':
+            self.atrb['STR'] += 1
+            self.atrb['AGI'] += 1
+            self.atrb['DEX'] += 1
+            self.atrb['CON'] += 1
+            self.str_bonus = round(self.atrb['STR']/2)
+            self.agi_bonus = round(self.atrb['AGI']/2)
+            self.dex_bonus = round(self.atrb['DEX']/2)
+            self.con_bonus = round(self.atrb['CON']/2)
+            self.hpmax = self.atrb['CON']*4
+            self.hp = self.hpmax
+            self.ac = 9+self.atrb['AGI']
+            print('\n'+self.name+" is a level", self.clvl, self.cclass,'Whose current Stats are: ', ', '.join("{}: {}".format(k, v) for k, v in self.atrb.items()))
+            print(self.name+"'s", 'current HP is', self.hp)
+            print(self.name+"'s", 'current AC is', self.ac)
+            input('Press enter to continue.')
+            
+        elif self.cclass == 'BARBARIAN':
+            self.atrb['STR'] += 1
+            self.atrb['AGI'] += 1
+            self.atrb['DEX'] += 1
+            self.atrb['CON'] += 1
+            self.str_bonus = round(self.atrb['STR']/2)
+            self.agi_bonus = round(self.atrb['AGI']/2)
+            self.dex_bonus = round(self.atrb['DEX']/2)
+            self.con_bonus = round(self.atrb['CON']/2)
+            self.hpmax = self.atrb['CON']*4
+            self.hp = self.hpmax
+            self.ac = 9+self.atrb['AGI']
+            print('\n'+self.name+" is a level", self.clvl, self.cclass,'Whose current Stats are: ', ', '.join("{}: {}".format(k, v) for k, v in self.atrb.items()))
+            print(self.name+"'s", 'current HP is', self.hp)
+            print(self.name+"'s", 'current AC is', self.ac)
+            input('Press enter to continue.')
                 
     def __hit(self):
         hit = d20() + self.dex_bonus
         return hit
     
     def __dmg(self):
-        if self.wpn_equip == '':
-            damage = 1 + self.str_bonus
-
-        elif self.wpn_equip == 'Dagger':
-            if self.str_bonus >= self.dex_bonus:
-                damage = d4() + self.str_bonus
-            elif self.dex_bonus > self.str_bonus:
+        if self.wpn_equip == 'Dagger':
+            if self.dex_bonus > self.str_bonus:
                 damage = d4() + self.dex_bonus
+            else:
+                damage = d4() + self.str_bonus
 
-        elif self.wpn_equip == 'Shortsword':
+        elif self.wpn_equip in ('Shortsword', 'Mace'):
             damage = d6() + self.str_bonus
 
-        elif self.wpn_equip == 'Mace':
-            damage = d6() + self.str_bonus
-
-        elif self.wpn_equip == 'Arming Sword':
+        elif self.wpn_equip in ('Arming Sword', 'warhammer'):
             damage = d8() + self.str_bonus
 
         elif self.wpn_equip == 'Rapier':
-            if self.str_bonus >= self.dex_bonus:
-                damage = d8() + self.str_bonus
-            elif self.dex_bonus > self.str_bonus:
+            if self.dex_bonus > self.str_bonus:
                 damage = d8() + self.dex_bonus
-
-        elif self.wpn_equip == 'Warhammer':
-            damage = d8() + self.str_bonus
+            else:
+                damage = d8() + self.str_bonus
 
         elif self.wpn_equip == 'Longsword':
             damage = d10() + self.str_bonus
 
-        elif self.wpn_equip == 'Greatsword':
+        elif self.wpn_equip in ('Greatsword', 'Maul'):
             damage = d12() + self.str_bonus
 
-        elif self.wpn_equip == 'Maul':
-            damage = d12() + self.str_bonus
+        else:
+            damage = 1 + self.str_bonus
             
         return damage
 
     def atk(self):
+        self.crit = False
         self.hit = self.__hit()
         self.dmg = self.__dmg()
+        if (self.hit - self.dex_bonus) == 20:
+            self.crit = True
+            self.dmg = (self.dmg * 2)
 
 #PC END
 
@@ -256,7 +312,7 @@ class THUG():
     dmg_bonus = 3
 
     def __init__(self):
-        self.hpmax = d8() + 8
+        self.hpmax = d8() + d8() + 2
         self.hp = self.hpmax
         self.ac = random.choice(THUG.thugac)
         self.wpn_equip = random.choice(THUG.thugweps)
@@ -311,7 +367,10 @@ def e1():
             if gob2.hp == 0:
                 print('You make an attack against the first Goblin with your', pc.wpn_equip, '.')
                 if pc.hit >= gob1.ac:
-                        print('Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
+                        if pc.crit:
+                            print('Critical hit! Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
+                        else:
+                            print('Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
                         if gob1.hp - pc.dmg <= 0:
                             gob1.hp = 0
                             print('Your blow deals lethal damage, the Goblins blood splatters across the floor and its body drops limp and lifeless to the floor.')
@@ -323,7 +382,10 @@ def e1():
             elif gob1.hp == 0:
                 print('You make an attack against the second Goblin with your', pc.wpn_equip, '.')
                 if pc.hit >= gob2.ac:
-                    print('Your attack hits the goblin! (', pc.hit, 'vs', gob2.ac, ') Dealing', pc.dmg, 'damage.')
+                    if pc.crit:
+                            print('Critical hit! Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
+                    else:
+                            print('Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
                     if gob2.hp - pc.dmg <= 0:
                         gob2.hp = 0
                         print('Your blow deals lethal damage, the Goblins head rolls from its shoulders and its body drops limp and lifeless to the floor.')
@@ -343,7 +405,10 @@ def e1():
                     if atk_trgt == '1':
                         print('You make an attack against the first Goblin with your', pc.wpn_equip, '.')
                         if pc.hit >= gob1.ac:
-                            print('Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
+                            if pc.crit:
+                                print('Critical hit! Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
+                            else:
+                                print('Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
                             if gob1.hp - pc.dmg <= 0:
                                 gob1.hp = 0
                                 print('Your blow deals lethal damage, the Goblins blood splatters across the floor and its body drops limp and lifeless to the floor.')
@@ -356,7 +421,10 @@ def e1():
                     elif atk_trgt == '2':
                         print('You make an attack against the second Goblin with your', pc.wpn_equip, '.')
                         if pc.hit >= gob2.ac:
-                            print('Your attack hits the goblin! (', pc.hit, 'vs', gob2.ac, ') Dealing', pc.dmg, 'damage.')
+                            if pc.crit:
+                                print('Critical hit! Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
+                            else:
+                                print('Your attack hits the goblin! (', pc.hit, 'vs', gob1.ac, ') Dealing', pc.dmg, 'damage.')
                             if gob2.hp - pc.dmg <= 0:
                                 gob2.hp = 0
                                 print('Your blow deals lethal damage, the Goblins head rolls from its shoulders and its body drops limp and lifeless to the floor.')
@@ -419,6 +487,7 @@ def e1():
 
     if gob1.hp <= 0 and gob2.hp <= 0:
         print('You walk away from the Goblins corpses and continue on your journey.')
+        pc.lvlup()
 
     if pc.hp <= 0:
         print('GAME OVER')
@@ -427,9 +496,7 @@ def e1():
 
 def e2():
     choice = None
-    print('\nA grueling battle completed, you decide to see if the Goblins have anything of value and take a short rest to tend your wounds.')
-    pc.hp = pc.hpmax
-    print('\nResting recovers your HP. Current HP: ', pc.hp, '/', pc.hpmax)
+    print('\nA grueling battle completed, you decide to see if the Goblins have anything of value and take a short rest.')
     print('\nLooking through the Goblins belongings you find a map that seems to have a camp marked nearby. Perhaps a chance for treasure?')
     print('\nOr maybe it is safer to continue to the town.')
     print('''
@@ -457,7 +524,10 @@ def e2():
                     pc.atk()
                     print('You make an attack against the Ogre with your', pc.wpn_equip, '.')
                     if pc.hit >= ogre1.ac:
-                        print('Your attack hits the Ogre! (', pc.hit, 'vs', ogre1.ac, ') Dealing', pc.dmg, 'damage.')
+                        if pc.crit:
+                            print('Critical hit! Your attack hits the Ogre! (', pc.hit, 'vs', ogre1.ac, ') Dealing', pc.dmg, 'damage.')
+                        else:
+                            print('Your attack hits the Ogre! (', pc.hit, 'vs', ogre1.ac, ') Dealing', pc.dmg, 'damage.')
                         if ogre1.hp - pc.dmg <= 0:
                             ogre1.hp = 0
                             print('Your blow deals lethal damage, the Ogre bloodied and bruised, collapses to the ground with a loud thud.')
@@ -532,4 +602,20 @@ def main():
 
 pc = PC()
 main()
-input('\nPress enter to exit')
+exit = None
+while exit == None:
+    exit = input('\nDo you want to retry? (Y/N):')
+    exit = exit.upper()
+    if exit == 'Y':
+        pc = PC()
+        main()
+        exit = None
+        continue
+    elif exit =='N':
+        input('\nThanks for playing! Press enter to exit.')
+        break
+    else:
+        print('Invalid input.')
+        exit = None
+        continue
+        
