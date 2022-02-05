@@ -1,5 +1,13 @@
 import sys
 import random
+from os import system
+
+#Defining a clear screen function
+system('')
+def clear():
+    input('Press enter to continue')
+    _=system('cls')
+
 #Import system, random and define dice rollers
 def d4():
     roll = random.randint(1,4)
@@ -25,12 +33,43 @@ def d20():
     roll = random.randint(1,20)
     return roll
 
+def roll(dice,number=1):
+    dicelst = ['d4','d6','d8','d10','d12','d20']
+    total = 0
+    if dice in dicelst:
+        if dice == 'd4':
+            for x in range(0,number):
+                total += d4()
+            return total
+        elif dice == 'd6':
+            for x in range(0,number):
+                total += d6()
+            return total
+        elif dice == 'd8':
+            for x in range(0,number):
+                total += d8()
+            return total
+        elif dice == 'd10':
+            for x in range(0,number):
+                total += d10()
+            return total
+        elif dice == 'd12':
+            for x in range(0,number):
+                total += d12()
+            return total
+        elif dice == 'd20':
+            for x in range(0,number):
+                total += d20()
+            return total
+    else:
+        return 1
+
 #PC START
 class PC():
     #Starting Classes available to player
     __classes = ['FIGHTER', 'ROGUE', 'BARBARIAN']
     #All weapons
-    __wpns = ['Dagger', 'Shortsword', 'Mace', 'Arming Sword', 'Rapier', 'Warhammer', 'Longsword', 'Greatsword', 'Maul']
+    __wpns = {'Dagger':['d4', 'dex'], 'Shortsword':['d6', 'str'], 'Mace':['d6', 'str'], 'Arming Sword':['d8', 'str'], 'Battle Axe':['d8', 'str'], 'Rapier':['d8', 'dex'], 'Warhammer':['d8', 'str'], 'Longsword':['d10', 'str'], 'Greataxe':['d12', 'str'], 'Greatsword':['d12', 'str'], 'Maul':['d12', 'str']}
     #Progress flag
     pflag = 1
     
@@ -41,9 +80,9 @@ class PC():
             print('''
 Class Select
 
-Fighter: Average stats, uses a Longsword.
-Rogue: Dex based attacks, high AC and accuracy but low hp, uses a Rapier.
-Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
+Fighter: Average stats, starts with a shortsword.
+Rogue: Dex based attacks, high AC and accuracy but low hp, starts with a dagger.
+Barbarian: High Str and Con but low AC and accuracy, starts with a battle axe.
 
         ''')
             choice = input('\nWhich Class would you like to play as?: ')
@@ -52,7 +91,7 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
                 if choice == 'FIGHTER':
                     self.cclass = 'FIGHTER'
                     self.clvl = 1
-                    self.wpn_equip = 'Longsword'
+                    self.wpn_equip = 'Shortsword'
                     self.atrb['STR'] = 6
                     self.atrb['AGI'] = 5
                     self.atrb['DEX'] = 4
@@ -68,7 +107,7 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
                 elif choice == 'ROGUE':
                     self.cclass = 'ROGUE'
                     self.clvl = 1
-                    self.wpn_equip = 'Rapier'
+                    self.wpn_equip = 'Dagger'
                     self.atrb['STR'] = 1
                     self.atrb['AGI'] = 8
                     self.atrb['DEX'] = 8
@@ -84,7 +123,7 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
                 elif choice == 'BARBARIAN':
                     self.cclass = 'BARBARIAN'
                     self.clvl = 1
-                    self.wpn_equip = 'Maul'
+                    self.wpn_equip = 'Battle Axe'
                     self.atrb['STR'] = 8
                     self.atrb['AGI'] = 1
                     self.atrb['DEX'] = 2
@@ -133,7 +172,7 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
         self.__char_build()
 
     def lvlup(self):
-        print('Congratulations you have levelled up!')
+        print('\nCongratulations you have levelled up!')
         self.clvl += 1
         
         if self.cclass == 'FIGHTER':
@@ -151,7 +190,7 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
             print('\n'+self.name+" is a level", self.clvl, self.cclass,'Whose current Stats are: ', ', '.join("{}: {}".format(k, v) for k, v in self.atrb.items()))
             print(self.name+"'s", 'current HP is', self.hp)
             print(self.name+"'s", 'current AC is', self.ac)
-            input('Press enter to continue.')
+            clear()
             
         elif self.cclass == 'ROGUE':
             self.atrb['STR'] += 1
@@ -168,7 +207,7 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
             print('\n'+self.name+" is a level", self.clvl, self.cclass,'Whose current Stats are: ', ', '.join("{}: {}".format(k, v) for k, v in self.atrb.items()))
             print(self.name+"'s", 'current HP is', self.hp)
             print(self.name+"'s", 'current AC is', self.ac)
-            input('Press enter to continue.')
+            clear()
             
         elif self.cclass == 'BARBARIAN':
             self.atrb['STR'] += 1
@@ -185,36 +224,24 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
             print('\n'+self.name+" is a level", self.clvl, self.cclass,'Whose current Stats are: ', ', '.join("{}: {}".format(k, v) for k, v in self.atrb.items()))
             print(self.name+"'s", 'current HP is', self.hp)
             print(self.name+"'s", 'current AC is', self.ac)
-            input('Press enter to continue.')
+            clear()
                 
     def __hit(self):
-        hit = d20() + self.dex_bonus
-        return hit
+        self.crit = False
+        hit = d20()
+        if hit == 20:
+            self.crit = True
+        return hit + self.dex_bonus
     
     def __dmg(self):
-        if self.wpn_equip == 'Dagger':
-            if self.dex_bonus > self.str_bonus:
-                damage = d4() + self.dex_bonus
+        if self.wpn_equip in PC.__wpns:
+            if PC.__wpns[self.wpn_equip][1] == 'dex':
+                if self.dex_bonus > self.str_bonus:
+                    damage = roll(PC.__wpns[self.wpn_equip][0]) + self.dex_bonus
+                else:
+                    damage = roll(PC.__wpns[self.wpn_equip][0]) + self.str_bonus
             else:
-                damage = d4() + self.str_bonus
-
-        elif self.wpn_equip in ('Shortsword', 'Mace'):
-            damage = d6() + self.str_bonus
-
-        elif self.wpn_equip in ('Arming Sword', 'warhammer'):
-            damage = d8() + self.str_bonus
-
-        elif self.wpn_equip == 'Rapier':
-            if self.dex_bonus > self.str_bonus:
-                damage = d8() + self.dex_bonus
-            else:
-                damage = d8() + self.str_bonus
-
-        elif self.wpn_equip == 'Longsword':
-            damage = d10() + self.str_bonus
-
-        elif self.wpn_equip in ('Greatsword', 'Maul'):
-            damage = d12() + self.str_bonus
+                damage = roll(PC.__wpns[self.wpn_equip][0]) + self.str_bonus
 
         else:
             damage = 1 + self.str_bonus
@@ -222,128 +249,96 @@ Barbarian: High Str and Con but low AC and accuracy, uses a Maul.
         return damage
 
     def atk(self):
-        self.crit = False
         self.hit = self.__hit()
-        self.dmg = self.__dmg()
-        if (self.hit - self.dex_bonus) == 20:
-            self.crit = True
-            self.dmg = (self.dmg * 2)
+        if self.crit:
+            if PC.__wpns[self.wpn_equip][1] == 'dex' and self.dex_bonus > self.str_bonus:
+                self.dmg = (self.__dmg()*2)-self.dex_bonus
+            else:
+                self.dmg = (self.__dmg()*2)-self.str_bonus
+        else:
+            self.dmg = self.__dmg()
 
 #PC END
 
-#GOBLIN START
-class GOBLIN():
-    gobweps = ['Dagger', 'Scimitar', 'Spiked Club']
-    gobac = [11, 13, 15, 17]
-    hit_bonus = 2
-    dmg_bonus = 3
+#NPC START
+class NPC():
+    weps = []
+    weps_dmg = {}
+    ac = []
+    hit_die = []
+    hp_bonus = 1
+    hit_bonus = 1
+    dmg_bonus = 1
     
     def __init__(self):
-        self.hpmax = d6() + d6() + 2
+        self.hpmax = roll(self.hit_die[0],self.hit_die[1]) + self.hp_bonus
         self.hp = self.hpmax
-        self.ac = random.choice(GOBLIN.gobac)
-        self.wpn_equip = random.choice(GOBLIN.gobweps)
+        self.ac = random.choice(self.ac)
+        self.wpn_equip = random.choice(self.weps)
 
     def __hit(self):
-        roll = d20() + GOBLIN.hit_bonus
-        return roll
+        self.crit = False
+        roll = d20()
+        if roll == 20:
+            self.crit = True
+        return roll + self.hit_bonus
     
     def __dmg(self):
-        if self.wpn_equip == '':
-            damage = 1 + GOBLIN.dmg_bonus
+        if self.wpn_equip in self.weps_dmg:
+            damage = roll(self.weps_dmg[self.wpn_equip][0],self.weps_dmg[self.wpn_equip][1]) + self.dmg_bonus
 
-        elif self.wpn_equip == 'Dagger':
-            damage = d4() + GOBLIN.dmg_bonus
-
-        elif self.wpn_equip == 'Scimitar':
-            damage = d6() + GOBLIN.dmg_bonus
-
-        elif self.wpn_equip == 'Spiked Club':
-            damage = d8() + GOBLIN.dmg_bonus
+        else:
+            damage = 1 + self.dmg_bonus
+            
         return damage
 
     def atk(self):
         self.hit = self.__hit()
-        self.dmg = self.__dmg()
-        
+        if self.crit:
+            self.dmg = (self.__dmg()*2)-self.dmg_bonus
+        else:
+            self.dmg = self.__dmg()
+#NPC END
 
+#GOBLIN START
+class GOBLIN(NPC):
+    weps = ['Dagger', 'Shortsword', 'Spiked Club']
+    weps_dmg = {'Dagger':['d4',1], 'Shortsword':['d6',1], 'Spiked Club':['d8',1]}
+    ac = [10, 12, 14, 16]
+    hit_die = ['d6',2]
+    hp_bonus = 2
+    hit_bonus = 2
+    dmg_bonus = 3
 #GOBLIN END
 
 #OGRE START
-class OGRE():
-    ogreweps = ['Fists', 'Club', 'Spiked Club']
-    ogreac = [9, 11, 13]
+class OGRE(NPC):
+    weps = ['Fists', 'Club', 'Spiked Club']
+    weps_dmg = {'Fists':['d4',2], 'Club':['d6',2], 'Spiked Club':['d8',2]}
+    ac = [9, 11, 12, 14]
+    hp_bonus = 9
+    hit_die = ['d10',3]
     hit_bonus = 4
     dmg_bonus = 5
-
-    def __init__(self):
-        self.hpmax = d10()+d10()+d10()+9
-        self.hp = self.hpmax
-        self.ac = random.choice(OGRE.ogreac)
-        self.wpn_equip = random.choice(OGRE.ogreweps)
-
-    def __hit(self):
-        roll = d20() + OGRE.hit_bonus
-        return roll
-
-    def __dmg(self):
-        if self.wpn_equip == 'Fists':
-            damage = d4() + d4() + OGRE.dmg_bonus
-
-        elif self.wpn_equip == 'Club':
-            damage = d6() + d6() + OGRE.dmg_bonus
-
-        elif self.wpn_equip == 'Spiked Club':
-            damage = d8() + d8() + OGRE.dmg_bonus
-        return damage
-
-    def atk(self):
-        self.hit = self.__hit()
-        self.dmg = self.__dmg()
-
 #OGRE END
 
 #THUG START
-
-class THUG():
-    thugweps = ['Dagger', 'Mace', 'Arming Sword']
-    thugac = [10, 12, 14, 16]
+class THUG(NPC):
+    weps = ['Dagger', 'Mace', 'Arming Sword']
+    weps_dmg = {'Dagger':['d4',1], 'Mace':['d6',1], 'Arming Sword':['d8',1]}
+    ac = [10, 12, 14, 16]
+    hit_die = ['d8',2]
+    hp_bonus = 2
     hit_bonus = 2
     dmg_bonus = 3
-
-    def __init__(self):
-        self.hpmax = d8() + d8() + 2
-        self.hp = self.hpmax
-        self.ac = random.choice(THUG.thugac)
-        self.wpn_equip = random.choice(THUG.thugweps)
-
-    def __hit(self):
-        roll = d20() + THUG.hit_bonus
-        return roll
-
-    def __dmg(self):
-        if self.wpn_equip == 'Dagger':
-            damage = d4() + THUG.dmg_bonus
-
-        elif self.wpn_equip == 'Mace':
-            damage = d6() + THUG.dmg_bonus
-
-        elif self.wpn_equip == 'Arming Sword':
-            damage = d8() + THUG.dmg_bonus
-        return damage
-
-    def atk(self):
-        self.hit = self.__hit()
-        self.dmg = self.__dmg()
-
 #THUG END
 
-def e1():
+def e1(pc):
     print('\nYou journey along a lonesome road, the town you seek is just over the horizon.')
     print('You come to a slight bend in the road, the road ahead is blocked by a copse of trees.')
     print('Wary you continue down the road, as you pass the trees a strange smell fills your nostrils and something bursts forth from the thicket.')
     print('Two Goblins! Weapons bared and ready to kill, you prepare for a fight to the death.')
-    input('\nPress enter to coninue.')
+    clear()
 
     gob1 = GOBLIN()
     gob2 = GOBLIN()
@@ -454,7 +449,10 @@ def e1():
             print('The first Goblin swings at you with its', gob1.wpn_equip, '.')
     
             if gob1.hit >= pc.ac:
-                print("The Goblin's attack hits! (", gob1.hit, 'vs', pc.ac, ') Dealing', gob1.dmg, 'damage.')
+                if gob1.crit:
+                    print('The Goblin hits a critical hit!(', gob1.hit, 'vs', pc.ac, ') Dealing', gob1.dmg, 'damage.')
+                else:
+                    print("The Goblin's attack hits! (", gob1.hit, 'vs', pc.ac, ') Dealing', gob1.dmg, 'damage.')
                 if pc.hp - gob1.dmg <= 0:
                     print("The Goblin's blow deals lethal damage! It chuckles as you fall to the ground dead.")
                     pc.hp = 0
@@ -471,7 +469,10 @@ def e1():
             print('The second Goblin slashes at you with its', gob2.wpn_equip, '.')
 
             if gob2.hit >= pc.ac:
-                print("The Goblin's attack hits! (", gob2.hit, 'vs', pc.ac, ') Dealing', gob2.dmg, 'damage.')
+                if gob2.crit:
+                    print('The Goblin hits a critical hit!(', gob2.hit, 'vs', pc.ac, ') Dealing', gob2.dmg, 'damage.')
+                else:
+                    print("The Goblin's attack hits! (", gob2.hit, 'vs', pc.ac, ') Dealing', gob2.dmg, 'damage.')
                 if pc.hp - gob2.dmg <= 0:
                     print("The Goblin's blow deals lethal damage! It chortles as you fall to the ground dead.")
                     pc.hp = 0
@@ -494,7 +495,7 @@ def e1():
         pc.pflag = 0
         sys.exit
 
-def e2():
+def e2(pc):
     choice = None
     print('\nA grueling battle completed, you decide to see if the Goblins have anything of value and take a short rest.')
     print('\nLooking through the Goblins belongings you find a map that seems to have a camp marked nearby. Perhaps a chance for treasure?')
@@ -507,8 +508,9 @@ def e2():
         choice = input('\nWhat will you do?: ')
         if choice == '1':
             print('\nYou head through the forest towards the marked location, eventually you come to see a small clearing ahead of you a fire lit at its centre. Surrounding it are two tents one of medium size the other quite large.')
-            print('\nAs you approach the camp the smell of burning flesh fills your nostrils as you see a humanoid creature roasting ona spit above the fire. Quiet, too quiet you think. All of a sudden a load crack sounds behind you!')
+            print('\nAs you approach the camp the smell of burning flesh fills your nostrils as you see a humanoid creature roasting on a spit above the fire. Quiet, too quiet you think. All of a sudden a load crack sounds behind you!')
             print('\nTurning you see a large ogre. "Another one for the fire, yum yummy yum" it says in a booming voice. It looks like you are in for a fight!')
+            clear()
             ogre1 = OGRE()
             choice = None
             while ogre1.hp > 0 or pc.hp > 0:
@@ -551,13 +553,16 @@ def e2():
                     print('The Ogre swings at you with its', ogre1.wpn_equip, '.')
     
                     if ogre1.hit >= pc.ac:
+                        if ogre1.crit:
+                            print("The Ogre hits a critical hit! (", ogre1.hit, 'vs', pc.ac, ') Dealing', ogre1.dmg, 'damage.')
+                        else:
                             print("The Ogre's attack hits! (", ogre1.hit, 'vs', pc.ac, ') Dealing', ogre1.dmg, 'damage.')
-                            if pc.hp - ogre1.dmg <= 0:
-                                print("The Ogre's blow deals lethal damage! It lifts your lifeless body off the ground and throws it onto the fire, 'Yummy yum yum' it cackles.")
-                                pc.hp = 0
-                                break
-                            else:
-                                pc.hp -= ogre1.dmg
+                        if pc.hp - ogre1.dmg <= 0:
+                            print("The Ogre's blow deals lethal damage! It lifts your lifeless body off the ground and throws it onto the fire, 'Yummy yum yum' it cackles.")
+                            pc.hp = 0
+                            break
+                        else:
+                            pc.hp -= ogre1.dmg
                     elif ogre1.hit < pc.ac:
                         print("The Ogre's attack misses!(", ogre1.hit, 'vs', pc.ac, ') It huffs and puffs in annoyance.')
 
@@ -566,11 +571,11 @@ def e2():
                               print('You leave your defensive stance (AC returned to normal (', pc.ac, ')).')
 
             if ogre1.hp <= 0:
-                print('You collapse exhausted from the fight, the Ogres body lying next to you, your eyelids feel heavy and you fall unconcious.')
+                print('\nYou collapse exhausted from the fight, the Ogres body lying next to you, your eyelids feel heavy and you fall unconcious.')
                 print('After a few hours of rest you awaken to the foul stench of the dead ogre and the burnt flesh of the corpse over the now dwindling fire.')
                 pc.hp = pc.hpmax
                 print('Despite the uncomfortable nature of your rest you find your wounds no longer trouble you. Current HP: ', pc.hp, '/', pc.hpmax)
-                print('Feeling refreshed and emboldened from your recent victory you decide to search the camp. After some time you find little of worth and curse the Ogre in frustration.')
+                print('\nFeeling refreshed and emboldened from your recent victory you decide to search the camp. After some time you find little of worth and curse the Ogre in frustration.')
                 print('Eventually you decide to leave the forest and head down the path that will lead you to the nearby town.')
             if pc.hp <= 0:
                 print('GAME OVER')
@@ -586,36 +591,75 @@ def e2():
             choice = None
             continue
 
-def e3():
-    print('The setting sun lies low in the distance, its red light giving a gloomy feel to the evening as you approach the town.')
+def e3(pc):
+    clear()
+    print('\nThe setting sun lies low in the distance, its red light giving a gloomy feel to the evening as you approach the town.')
     print('The high buildings and its wooden walls come into view and you hurry along the path to the towns gates')
+    print('As you approach a burly guard raises his hand, "Halt traveller. What brings you to the town of Arnhollen so late in the eve?"')
+    choice = None
+    while choice == None:
+        print(f'''
+        1 - "My business is my own but know that I come with no ill intent, I seek only a place to rest."
+
+        2 - "My name is {pc.name} and I have journeyed far and been assailed by goblins on the road, I seek somewhere to retire for the night."
+
+        3 - "I am the great hero {pc.name} and I have come to help this town in any way I can. but first I require food and board if you would be so kind."
+        ''')
+        choice = input('How do you respond?: ')
+
+        if choice == '1':
+            print('\n"All right all right, it is my job to ask. There has been talk of strange folk abroad and you can never be too careful." The guard responds')
+            print('"Well you look trustworthy enough, as long you as promise to stay out of trouble head on in."')
+            print('"Oh, and I would recommend the Crow'+"'s"+' head if you want some rest and good food."')
+            print('"Be seeing you now and watch yourself the streets can be dangerous at night."')
+
+        elif choice == '2':
+            print('\n"Goblins you say? Dark times, dark times indeed if they are so close now. Come on in quick." Says the guard with a furrowed brow.')
+            print('"Worry not, the walls of Arnhollen will keep those goblins out. Head to the Crow'+"'s"+' head if you want some rest and good food."')
+            print('"Be seeing you now and watch yourself it is not just goblins to be careful of."')
+
+        elif choice == '3':
+            print('\n"Oh? Great hero is it? Never heard of you! Well, you look well armed and capable and there are troubles aplenty in Arnhollen ever since the Lord went to fight the King'+"s"+' war". The guard looks troubled as he talks.')
+            print('"Hmm come on in. But stay out of trouble ya hear! And if you need a place to stay head to the Crow'+"'s"+' head if you want some rest and good food."')
+            print('"Be seeing you now and watch out for thugs, they like to cause trouble at night."')
+
+        else:
+            print('Invalid choice.')
+            choice = None
+            continue
+
+    print('\nYou ask directions to the inn and head on your way through the dark streets of Arnhollen.')
+    
     
         
 def main():
-    while pc.pflag >= 1:
-        e1()
-        if pc.pflag == 0:
-            break
-        e2()
-        if pc.pflag == 0:
-            break
-
-pc = PC()
-main()
-exit = None
-while exit == None:
-    exit = input('\nDo you want to retry? (Y/N):')
-    exit = exit.upper()
-    if exit == 'Y':
+    end = False
+    choice = None
+    while not end:
         pc = PC()
-        main()
-        exit = None
-        continue
-    elif exit =='N':
-        input('\nThanks for playing! Press enter to exit.')
-        break
-    else:
-        print('Invalid input.')
-        exit = None
-        continue
-        
+        while pc.pflag >= 1:
+            e1(pc)
+            if pc.pflag == 0:
+                break
+            e2(pc)
+            if pc.pflag == 0:
+                break
+            e3(pc)
+            if pc.pflag == 0:
+                break
+            print('\nThanks for playing this is the end of current content')
+            break
+        while choice == None:
+            choice = input('\nDo you want to retry? (Y/N):')
+            choice = choice.upper()
+            if choice == 'Y':
+                choice = None
+                break
+            elif choice =='N':
+                end = True
+                input('\nThanks for playing! Press enter to exit.')
+            else:
+                print('Invalid input.')
+                choice = None
+                continue
+main()
