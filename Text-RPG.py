@@ -555,6 +555,7 @@ Class Select
         print(f'Prepare for a gruelling journey {self.name}.')
         self.atrb = {'STR':1, 'AGI':1, 'DEX':1, 'CON':1}
         self.advantage = False
+        self.useab = False
         self.__char_build()
 
     def lvlup(self):
