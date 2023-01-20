@@ -438,8 +438,18 @@ class PC():
     #Progress flag
     pflag = 1
     
-    #Function which allows user to pick the class of the character
-    def __char_build(self):
+    #Setup for character lets user choose name and class and sets intitial values            
+    def __init__(self):
+        print('A new adventurer steps forward.')
+        self.name = input('Please choose a name: ')
+        if self.name == '':
+            while self.name == '':
+                self.name = input('Please choose a name: ')
+        self.name = self.name.title()
+        print(f'Prepare for a gruelling journey {self.name}.')
+        self.atrb = {'STR':1, 'AGI':1, 'DEX':1, 'CON':1}
+        self.advantage = False
+        self.useab = False
         choice = None
         while choice == None:
             print('''
@@ -543,20 +553,6 @@ Class Select
                     print('Invalid input.')
                     choice = None
                     continue
-            
-
-    def __init__(self):
-        print('A new adventurer steps forward.')
-        self.name = input('Please choose a name: ')
-        if self.name == '':
-            while self.name == '':
-                self.name = input('Please choose a name: ')
-        self.name = self.name.title()
-        print(f'Prepare for a gruelling journey {self.name}.')
-        self.atrb = {'STR':1, 'AGI':1, 'DEX':1, 'CON':1}
-        self.advantage = False
-        self.useab = False
-        self.__char_build()
 
     def lvlup(self):
         print('\nCongratulations you have levelled up!')
