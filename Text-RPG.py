@@ -2,6 +2,7 @@ import sys
 import random
 import math
 from os import system
+#Import system, random, math and os modules
 
 #Defining a clear screen function
 system('')
@@ -9,7 +10,7 @@ def clear():
     input('Press enter to continue')
     print('\n'*10)
 
-#Import system, random and define dice rollers
+#Define dice and dice roller
 def d4():
     roll = random.randint(1,4)
     return roll
