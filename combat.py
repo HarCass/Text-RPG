@@ -82,7 +82,7 @@ def combat(pc,*npc):
                         print('Invalid choice.')
                         atk_trgt = None
                         continue
-                    print(f'You make an attack against enemy {atk_trgt+1}, a {npc[atk_trgt].name}, with your {pc.wpn_equip}.')
+                    print(f'You make an attack against the {npc[atk_trgt].name}({atk_trgt+1}), with your {pc.wpn_equip}.')
                     if pc.hit >= npc[atk_trgt].ac or pc.crit:
                         if pc.crit:
                             print(f'Critical hit! Your attack hits the {npc[atk_trgt].name}! Dealing {pc.dmg} damage.')
@@ -134,7 +134,7 @@ def combat(pc,*npc):
                         if npc[x].hp == 0:
                             pass
                         else:
-                            print(f'You make an attack against the last enemy, a {npc[x].name}, with your {pc.wpn_equip}.')
+                            print(f'You make an attack against the {npc[x].name}, with your {pc.wpn_equip}.')
                             if pc.hit >= npc[x].ac or pc.crit:
                                 if pc.crit:
                                     print(f'Critical hit! Your attack hits the {npc[x].name}! Dealing {pc.dmg} damage.')
@@ -183,7 +183,7 @@ def combat(pc,*npc):
                             print('Invalid choice.')
                             atk_trgt = None
                             continue
-                        print(f'You make an attack against enemy {atk_trgt+1}, a {npc[atk_trgt].name}, with your {pc.wpn_equip}.')
+                        print(f'You make an attack against the {npc[atk_trgt].name}({atk_trgt+1}), with your {pc.wpn_equip}.')
                         if pc.hit >= npc[atk_trgt].ac or pc.crit:
                             if pc.crit:
                                 print(f'Critical hit! Your attack hits the {npc[atk_trgt].name}! Dealing {pc.dmg} damage.')
@@ -220,7 +220,7 @@ def combat(pc,*npc):
                 pass
             else:
                 npc[x].atk()
-                print(f'\nThe {npc[x].name}(${x+1}), swings at you with their {npc[x].wpn_equip}.')
+                print(f'\nThe {npc[x].name}({x+1}), swings at you with their {npc[x].wpn_equip}.')
     
                 if npc[x].hit >= pc.ac or npc[x].crit:
                     if npc[x].crit:
